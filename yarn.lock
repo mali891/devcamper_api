@@ -75,6 +75,13 @@ balanced-match@^1.0.0:
   resolved "https://ywdevelopers.pkgs.visualstudio.com/_packaging/ywnpm/npm/registry/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
 
+basic-auth@~2.0.1:
+  version "2.0.1"
+  resolved "https://ywdevelopers.pkgs.visualstudio.com/_packaging/ywnpm/npm/registry/basic-auth/-/basic-auth-2.0.1.tgz#b998279bf47ce38344b4f3cf916d4679bbf51e3a"
+  integrity sha1-uZgnm/R844NEtPPPkW1Gebv1Hjo=
+  dependencies:
+    safe-buffer "5.1.2"
+
 binary-extensions@^2.0.0:
   version "2.1.0"
   resolved "https://ywdevelopers.pkgs.visualstudio.com/_packaging/ywnpm/npm/registry/binary-extensions/-/binary-extensions-2.1.0.tgz#30fa40c9e7fe07dbc895678cd287024dea241dd9"
@@ -279,6 +286,11 @@ depd@~1.1.2:
   version "1.1.2"
   resolved "https://ywdevelopers.pkgs.visualstudio.com/_packaging/ywnpm/npm/registry/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
   integrity sha1-m81S4UwJd2PnSbJ0xDRu0uVgtak=
+
+depd@~2.0.0:
+  version "2.0.0"
+  resolved "https://ywdevelopers.pkgs.visualstudio.com/_packaging/ywnpm/npm/registry/depd/-/depd-2.0.0.tgz#b696163cc757560d09cf22cc8fad1571b79e76df"
+  integrity sha1-tpYWPMdXVg0JzyLMj60Vcbeedt8=
 
 destroy@~1.0.4:
   version "1.0.4"
@@ -708,6 +720,17 @@ minimist@^1.2.0:
   resolved "https://ywdevelopers.pkgs.visualstudio.com/_packaging/ywnpm/npm/registry/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha1-Z9ZgFLZqaoqqDAg8X9WN9OTpdgI=
 
+morgan@^1.10.0:
+  version "1.10.0"
+  resolved "https://ywdevelopers.pkgs.visualstudio.com/_packaging/ywnpm/npm/registry/morgan/-/morgan-1.10.0.tgz#091778abc1fc47cd3509824653dae1faab6b17d7"
+  integrity sha1-CRd4q8H8R801CYJGU9rh+qtrF9c=
+  dependencies:
+    basic-auth "~2.0.1"
+    debug "2.6.9"
+    depd "~2.0.0"
+    on-finished "~2.3.0"
+    on-headers "~1.0.2"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://ywdevelopers.pkgs.visualstudio.com/_packaging/ywnpm/npm/registry/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -767,6 +790,11 @@ on-finished@~2.3.0:
   integrity sha1-IPEzZIGwg811M3mSoWlxqi2QaUc=
   dependencies:
     ee-first "1.1.1"
+
+on-headers@~1.0.2:
+  version "1.0.2"
+  resolved "https://ywdevelopers.pkgs.visualstudio.com/_packaging/ywnpm/npm/registry/on-headers/-/on-headers-1.0.2.tgz#772b0ae6aaa525c399e489adfad90c403eb3c28f"
+  integrity sha1-dysK5qqlJcOZ5Imt+tkMQD6zwo8=
 
 once@^1.3.1, once@^1.4.0:
   version "1.4.0"
