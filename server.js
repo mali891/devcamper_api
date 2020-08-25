@@ -5,7 +5,7 @@ const colors = require('colors');
 
 const connectDB = require('./common/settings/db');
 const bootcamps = require('./routes/bootcamps');
-const URLS = require('./common/constants/urls');
+const errorHandler = require('./middleware/errorHandler');
 
 // Load env vars
 dotenv.config({ path: './common/settings/config.env' });
@@ -25,6 +25,9 @@ if (process.env.NODE_ENV === 'dev') {
 
 // Connect bootcamp routes
 app.use('/api/v1/bootcamps', bootcamps);
+
+// Connect error middleware
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
