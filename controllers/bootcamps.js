@@ -64,13 +64,9 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @access - Private
 **/
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-	try {
-		const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+	const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
 
-		return bootcamp
-			? successHandler(res, bootcamp, `Successfully deleted bootcamp ID: ${req.params.id}`)
-			: next(new ErrorResponse(`Resource with ID ${req.params.id} not found`, 404));
-	} catch (error) {
-		next(error);
-	}
+	return bootcamp
+		? successHandler(res, bootcamp, `Successfully deleted bootcamp ID: ${req.params.id}`)
+		: next(new ErrorResponse(`Resource with ID ${req.params.id} not found`, 404));
 });
