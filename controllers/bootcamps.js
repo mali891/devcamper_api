@@ -27,7 +27,37 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 // @access - Public
 **/
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-	const bootcamps = await Bootcamp.find();
+	let query;
+
+	const reqQuery = { ...req.query };
+
+	// Fields to exclude
+	const removeFields = ['select', 'sort'];
+
+	// Delete fields from request query
+	removeFields.forEach(param => delete reqQuery[param]);
+
+	// Create query string
+	let queryString = JSON.stringify(reqQuery);
+
+	// Create operators ($gt, $gte, $lt, etc)
+	queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
+
+	query = Bootcamp.find(JSON.parse(queryString));
+
+	// Select fields
+	if (req.query.select) {
+		query = query.select(req.query.select.split(',').join(' '));
+	}
+
+	// Sort fields
+	if (req.query.sort) {
+		query = query.sort(req.query.sort.split(',').join(' '));
+	} else {
+		query = query.sort('-createdAt');
+	}
+
+	const bootcamps = await query;
 
 	return bootcamps ? successHandler(res, bootcamps, null) : next(new ErrorResponse('No resources found', 404));
 });
