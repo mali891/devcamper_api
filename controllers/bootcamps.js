@@ -17,7 +17,7 @@ exports.getBootcamp = asyncHandler(async (req, res, next) => {
 	const bootcamp = await Bootcamp.findById(req.params.id);
 
 	return bootcamp
-		? successHandler(res, bootcamp, null)
+		? successHandler(res, bootcamp)
 		: next(new ErrorResponse(`Resource with ID ${req.params.id} not found`, 404));
 });
 
@@ -32,7 +32,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 	const reqQuery = { ...req.query };
 
 	// Fields to exclude
-	const removeFields = ['select', 'sort'];
+	const removeFields = ['select', 'sort', 'page', 'limit'];
 
 	// Delete fields from request query
 	removeFields.forEach(param => delete reqQuery[param]);
@@ -43,7 +43,7 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 	// Create operators ($gt, $gte, $lt, etc)
 	queryString = queryString.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-	query = Bootcamp.find(JSON.parse(queryString));
+	query = Bootcamp.find(JSON.parse(queryString)).populate('courses');
 
 	// Select fields
 	if (req.query.select) {
@@ -57,9 +57,31 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
 		query = query.sort('-createdAt');
 	}
 
+	// Pagination
+	const page = parseInt(req.query.page, 10) || 1;
+	const limit = parseInt(req.query.limit, 10) || 25;
+	const startIndex = (page - 1) * limit;
+	const endIndex = page * limit;
+	const total = await Bootcamp.countDocuments();
+
+	query = query.skip(startIndex).limit(limit);
+
 	const bootcamps = await query;
 
-	return bootcamps ? successHandler(res, bootcamps, null) : next(new ErrorResponse('No resources found', 404));
+	// Pagination result
+	const pagination = {};
+
+	if (endIndex < total) {
+		pagination.next = { page: page + 1, limit };
+	}
+
+	if (startIndex > 0) {
+		pagination.prev = { page: page - 1, limit };
+	}
+
+	return bootcamps
+		? res.status(200).json({ success: true, count: bootcamps.length, pagination, data: bootcamps })
+		: next(new ErrorResponse('No resources found', 404));
 });
 
 /**
@@ -84,7 +106,7 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
 		location: { $geoWithin: { $centerSphere: [[longitude, latitude], radius] } }
 	});
 
-	return bootcamps ? successHandler(res, bootcamps, null) : next(new ErrorResponse('No resources found', 404));
+	return bootcamps ? successHandler(res, bootcamps) : next(new ErrorResponse('No resources found', 404));
 });
 
 /**
@@ -95,7 +117,7 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
 	const bootcamp = await Bootcamp.create(req.body);
 
-	return bootcamp ? successHandler(res, bootcamp, null) : next(new ErrorResponse('Unable to create Bootcamp', 500));
+	return bootcamp ? successHandler(res, bootcamp) : next(new ErrorResponse('Unable to create Bootcamp', 500));
 });
 
 /**
