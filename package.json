@@ -8,7 +8,8 @@
 		"start:prod": "NODE_ENV=prod node server",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"data:seed": "node seeder -i",
-		"data:delete": "node seeder -d"
+		"data:delete": "node seeder -d",
+		"data": "yarn data:delete && yarn data:seed"
 	},
 	"author": "Mohammed Ali",
 	"license": "ISC",

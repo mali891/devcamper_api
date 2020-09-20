@@ -1,12 +1,8 @@
 const Bootcamp = require('../models/Bootcamp');
 const ErrorResponse = require('../common/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
+const successHandler = require('../middleware/successHandler');
 const geocoder = require('../common/utils/geocoder');
-
-const successHandler = (res, data = null, message = null) => {
-	res.status(200).json({ success: true, message, data });
-	console.log(message ? message.brightWhite.bold.underline : 'Success!'.brightWhite.bold.underline);
-};
 
 /**
 // @desc   - Get single bootcamp
@@ -142,7 +138,9 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @access - Private
 **/
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
-	const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+	const bootcamp = await Bootcamp.findById(req.params.id);
+
+	bootcamp.remove();
 
 	return bootcamp
 		? successHandler(res, bootcamp, `Successfully deleted bootcamp ID: ${req.params.id}`)
