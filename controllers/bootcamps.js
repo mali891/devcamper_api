@@ -1,3 +1,4 @@
+const path = require('path');
 const Bootcamp = require('../models/Bootcamp');
 const ErrorResponse = require('../common/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
@@ -140,9 +141,52 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 	const bootcamp = await Bootcamp.findById(req.params.id);
 
-	bootcamp.remove();
+	if (!bootcamp) {
+		return next(new ErrorResponse(`Resource with ID ${req.params.id} not found`, 404));
+	}
 
-	return bootcamp
-		? successHandler(res, bootcamp, `Successfully deleted bootcamp ID: ${req.params.id}`)
-		: next(new ErrorResponse(`Resource with ID ${req.params.id} not found`, 404));
+	res.status(200).json({ success: true, data: {} });
+});
+
+/**
+// @desc   - Upload bootcamp photo
+// @route  - PUT /api/v1/bootcamps/:id/photo
+// @access - Private
+**/
+exports.uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
+	const bootcamp = await Bootcamp.findById(req.params.id);
+
+	if (!bootcamp) {
+		return next(new ErrorResponse(`Resource with ID ${req.params.id} not found`, 404));
+	}
+
+	if (!req.files) {
+		return next(new ErrorResponse(`Please upload a file`, 400));
+	}
+
+	const file = req.files.file;
+
+	// Verify that the file is a photo
+	if (!file.mimetype.startsWith('image')) {
+		return next(new ErrorResponse(`Please upload an image file type`, 400));
+	}
+
+	// Verify file size
+	if (file.size > process.env.MAX_FILE_SIZE) {
+		return next(new ErrorResponse(`Please upload an image which is less than 1MB in size`, 400));
+	}
+
+	// Create unique filename
+	file.name = `photo_${bootcamp._id}${path.parse(file.name).ext}`;
+
+	file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async error => {
+		if (error) {
+			return next(new ErrorResponse(`Problem with file upload. Please try again later.`, 500));
+		}
+
+		await Bootcamp.findByIdAndUpdate(req.params.id, { photo: file.name });
+		res
+			.status(200)
+			.json({ success: true, data: `${file.name} successfully uploaded to ${process.env.FILE_UPLOAD_PATH}` });
+	});
 });
