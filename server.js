@@ -3,13 +3,13 @@ const path = require('path');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
-const fileupload = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 
 const connectDB = require('./common/settings/db');
 const bootcamps = require('./routes/bootcamps');
 const courses = require('./routes/courses');
+const auth = require('./routes/auth');
 const errorHandler = require('./middleware/errorHandler');
-const fileUpload = require('express-fileupload');
 
 // Load env vars
 dotenv.config({ path: './common/settings/config.env' });
@@ -36,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Connect bootcamp routes
 app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
+app.use('/api/v1/auth', auth);
 
 // Connect error middleware
 app.use(errorHandler);
