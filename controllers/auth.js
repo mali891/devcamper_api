@@ -63,3 +63,15 @@ const sendTokenResponse = async (user, statusCode, res) => {
 		})
 		.json({ success: true, data: token });
 };
+
+/**
+// @desc   - Get current logged in user
+// @route  - POST /api/v1/auth/me
+// @access - Private
+**/
+
+exports.getMe = asyncHandler(async (req, res, next) => {
+	const user = await User.findById(req.user.id);
+
+	return user ? res.status(200).json({ success: true, data: user }) : next(new ErrorResponse('No user found', 404));
+});
