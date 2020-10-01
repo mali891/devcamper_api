@@ -58,7 +58,6 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
 // @access - Private
 **/
 exports.createBootcamp = asyncHandler(async (req, res, next) => {
-	console.warn('here');
 	const bootcamp = await Bootcamp.create(req.body);
 
 	return bootcamp ? successHandler(res, bootcamp) : next(new ErrorResponse('Unable to create Bootcamp', 500));

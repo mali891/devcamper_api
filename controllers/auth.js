@@ -39,7 +39,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 	const user = await User.findOne({ email }).select('+password');
 
 	if (!user) {
-		return next(new ErrorResponse('Please enter a valid email email address', 401));
+		return next(new ErrorResponse('Please enter a valid email address', 401));
 	}
 
 	// Validate user entered password
